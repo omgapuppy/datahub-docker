@@ -48,7 +48,8 @@ Usage:
 docker run \
     -v /path/to/local/datahub.config:/etc/datahub/datahub.config \
     -p 10000:10000 \
-    -p 4242:4242
+    -p 4242:4242 \
+    omgapuppy/logentries-datahub
 ```
 
 Similarly, whole config path can be linked as a volume `-v` in the container, if further modifications to config are needed.
