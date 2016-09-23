@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+    </Properties>
+
+	<!--
+		A default development log4j config which prints
+		everything to the console. You'll want to override
+		this in production (-Dlog4j.configurationFile=...)
+	-->
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+		</Console>
+
+        <!--
+            ${sys:log.filename} is set in the App.java in static block.
+            This value contains platform dependent path to DataHub log file
+        -->
+        <RollingFile name="DataHubLog" fileName="${sys:log.filename}"
+                     filePattern="${sys:log.filename}-%i.log.gz" >
+
+            <PatternLayout pattern="${pattern}"/>
+
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10" compressionLevel="5"/>
+        </RollingFile>
+
+	</Appenders>
+
+	<Loggers>
+		<logger name="com.logentries.proxy.App" level="${sys:log.level}" additivity="false">
+			<AppenderRef ref="Console"/>
+            <AppenderRef ref="DataHubLog"/>
+		</logger>
+		<Root level="${sys:log.level}">
+			<AppenderRef ref="Console"/>
+            <AppenderRef ref="DataHubLog"/>
+		</Root>
+	</Loggers>
+</Configuration>
